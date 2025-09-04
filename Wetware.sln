@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wetware", "Wetware\Wetware.csproj", "{93090942-2030-4CE5-8812-B4A350E53B55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wetware.Tests", "Wetware.Tests\Wetware.Tests.csproj", "{2D9A839F-F73E-4063-8DD7-15B902A923B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93090942-2030-4CE5-8812-B4A350E53B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93090942-2030-4CE5-8812-B4A350E53B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93090942-2030-4CE5-8812-B4A350E53B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93090942-2030-4CE5-8812-B4A350E53B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D9A839F-F73E-4063-8DD7-15B902A923B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D9A839F-F73E-4063-8DD7-15B902A923B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D9A839F-F73E-4063-8DD7-15B902A923B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D9A839F-F73E-4063-8DD7-15B902A923B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
