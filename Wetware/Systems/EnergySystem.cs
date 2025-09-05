@@ -6,7 +6,7 @@ using Wetware.Flags;
 
 namespace Wetware.Systems;
 
-public class EnergySystem : QuerySystem<Name, Energy, Speed>
+public class EnergySystem : QuerySystem<Energy, Speed>
 {
     private const int NormalSpeed = 12;
     private const int TurnCost = NormalSpeed * 4;
@@ -17,7 +17,7 @@ public class EnergySystem : QuerySystem<Name, Energy, Speed>
     {
         Debug.SystemBoundaryStart(nameof(EnergySystem));
         
-        Query.ForEachEntity((ref Name name, ref Energy energy, ref Speed speed, Entity e) =>
+        Query.ForEachEntity((ref Energy energy, ref Speed speed, Entity e) =>
         {
             if (CullTurnByDistance(e)) return;
             var potentialEnergy = (int)(speed.Value * GetBurdenModifier(e));
@@ -28,7 +28,7 @@ public class EnergySystem : QuerySystem<Name, Energy, Speed>
             energy.Value += fullNormalSpeedUnits * NormalSpeed;
             if (Dice.Roll(1, NormalSpeed) <= leftoverFractionalNormalSpeed) energy.Value += NormalSpeed;
         
-            Debug.Print($"{name.Value} has {energy.Value} energy.");
+            Debug.Print($"{e.DebugName()} has {energy.Value} energy.");
             
             if (energy.Value < TurnCost) return;
         
