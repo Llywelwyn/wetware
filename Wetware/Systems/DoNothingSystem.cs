@@ -13,8 +13,6 @@ public class DoNothingSystem : QuerySystem<Name>
     {
         Debug.SystemBoundaryStart(nameof(DoNothingSystem));
         
-        if (Game.ClockTurn) Debug.Print("Clock is taking its turn.");
-        
         Query.ForEachEntity((ref Name name, Entity e) =>
         {
             Debug.Print($"{name.Value} spent its turn doing nothing.");
