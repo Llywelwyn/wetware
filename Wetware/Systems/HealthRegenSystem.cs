@@ -4,11 +4,19 @@ using Wetware.Components;
 
 namespace Wetware.Systems;
 
-public class RegenSystem : QuerySystem<Health>
+/// <summary>
+/// Iterates entities with Health, checks if the current turn is a regen turn, and regenerates health if so.
+/// </summary>
+///
+/// <remarks>
+/// This system should run before or after the existence of <c>TakingTurn</c> tags. Restoring health may impact the
+/// decision an entity makes when taking its turn. Therefore, run before turns are assigned or after turns are resolved.
+/// </remarks>
+public class HealthRegenSystem : QuerySystem<Health>
 {
     protected override void OnUpdate()
     {
-        Debug.SystemBoundaryStart(nameof(RegenSystem));
+        Debug.SystemBoundaryStart(nameof(HealthRegenSystem));
 
         if (!Game.ClockTurn) return;
         
