@@ -1,4 +1,5 @@
 ﻿using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
 using Wetware.Components;
 
 namespace Wetware;
@@ -20,5 +21,17 @@ public static class EntityExtensions
         }
 
         return e.HasName ? $"{e.Name.value} ({e.Id})" : $"unnamed {e.Id}";
+    }
+}
+
+public static class EntityStoreExtensions
+{
+    public static EntityStore LoadFromFile(this EntityStore store, string path)
+    {
+        var serializer = new EntitySerializer();
+        var readStream = new FileStream(path, FileMode.Open);
+        serializer.ReadIntoStore(store, readStream);
+        readStream.Close();
+        return store;
     }
 }
