@@ -3,7 +3,7 @@
 namespace Wetware.Components;
 
 
-public struct Pos(int x, int y) : IIndexedComponent<(int, int)>
+public struct Position(int x, int y) : IIndexedComponent<(int, int)>
 {
     public int X = x;
     public int Y = y;
