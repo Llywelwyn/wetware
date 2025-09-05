@@ -5,6 +5,13 @@ using Wetware.Flags;
 
 namespace Wetware.Systems;
 
+/// <summary>
+/// This system removes all <c>TakingTurn</c> tags from entities, so no turns linger into the next tick.
+/// </summary>
+/// 
+/// <remarks>
+/// This should always be the last system to run.
+/// </remarks>
 public class DoNothingSystem : QuerySystem<Name>
 {
     public DoNothingSystem() => Filter.AllTags(Tags.Get<TakingTurn>());

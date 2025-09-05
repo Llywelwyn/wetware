@@ -29,6 +29,9 @@ public class HealthRegenSystem : QuerySystem<Health>
         CommandBuffer.Playback();
     }
 
+    /// <summary>Checks if the given entity should restore health on this tick.</summary>
     private static bool IsRegenTurn(Entity e) => true;
+    
+    /// <summary>Gets the amount of health the entity should restore each tick.</summary>
     private static int GetRegenPerTick(Entity e) => 1;
 }

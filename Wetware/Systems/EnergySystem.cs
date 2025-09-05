@@ -6,6 +6,14 @@ using Wetware.Flags;
 
 namespace Wetware.Systems;
 
+/// <summary>
+/// Adds energy to entities based on their speed. When energy exceeds TurnCost, the entity is granted a
+/// <c>TakingTurn</c> tag.
+/// </summary>
+/// 
+/// <remarks>
+/// Save for exceptional circumstances, this should be the first system to run.
+/// </remarks>
 public class EnergySystem : QuerySystem<Energy, Speed>
 {
     private const int NormalSpeed = 12;
