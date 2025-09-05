@@ -1,13 +1,36 @@
 ﻿namespace Wetware;
 
+public enum DebugFlag
+{
+    SystemBoundary,
+}
+
 public static class Debug
 {
-    public static bool DebugAll = true;
-    private static bool _logSystemBoundaries = true;
+    private const bool DebugAllOverride = true;
+    private static readonly Dictionary<DebugFlag, bool> Flags = new()
+    {
+        [DebugFlag.SystemBoundary] = false,
+    };
 
-    public static bool LogSystemBoundaries => DebugAll || _logSystemBoundaries;
-   
+    private static bool IsEnabled(DebugFlag name)
+    {
+        if (!Flags.TryGetValue(name, out var value))
+            throw new ArgumentException($"Unknown flag: {name}.");
+        return value || DebugAllOverride;
+    }
+
     public static void Print(string message) => Console.WriteLine(message);
-    public static void SystemBoundaryStart(string name) => Console.WriteLine($"=== STARTING: {name}");
-    public static void SystemBoundaryEnd(string name) => Console.WriteLine($"~~~ ENDING: {name}");
+
+    public static void SystemBoundaryStart(string name)
+    {
+        if (IsEnabled(DebugFlag.SystemBoundary))
+            Console.WriteLine($"=== STARTING: {name}");
+    }
+
+    public static void SystemBoundaryEnd(string name)
+    {
+        if (IsEnabled(DebugFlag.SystemBoundary))
+            Console.WriteLine($"~~~ ENDING: {name}");
+    }
 }
