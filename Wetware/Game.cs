@@ -22,6 +22,7 @@ public class Game
         _updateSystems = new SystemRoot(World)
         {
             new EnergySystem(),
+            new RegenSystem(),
             new DoNothingSystem(),
         };
         
