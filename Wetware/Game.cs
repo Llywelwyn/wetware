@@ -13,11 +13,12 @@ public class Game
     public static bool ClockTurn => Instance.World.GetUniqueEntity(EId.Clock).Tags.Has<TakingTurn>();
     
     private readonly string _name;
-    public readonly EntityStore World;
     public bool LoadedFromFile;
+    
+    public readonly EntityStore World;
     private readonly SystemRoot _updateSystems;
     private readonly SystemRoot _renderSystems;
-
+    
     public Game(string? name)
     {
         _name = name ?? "world";
