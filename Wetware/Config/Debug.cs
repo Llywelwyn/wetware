@@ -1,4 +1,4 @@
-﻿namespace Wetware;
+﻿namespace Wetware.Config;
 
 public enum DebugFlag
 {

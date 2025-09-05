@@ -1,6 +1,7 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Wetware.Components;
+using Wetware.Config;
 
 namespace Wetware.Systems;
 
