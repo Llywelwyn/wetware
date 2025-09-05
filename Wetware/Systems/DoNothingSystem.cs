@@ -20,7 +20,7 @@ public class DoNothingSystem : QuerySystem<Name>
     protected override void OnUpdate()
     {
         Debug.SystemBoundaryStart(nameof(DoNothingSystem));
-        
+
         Query.ForEachEntity((ref Name name, Entity e) =>
         {
             Debug.Print($"{name.Value} spent its turn doing nothing.");
