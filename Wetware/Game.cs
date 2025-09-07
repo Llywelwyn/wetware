@@ -11,18 +11,18 @@ public class Game
 {
     internal static Game Instance = null!;
     public static bool ClockTurn => Instance.World.GetUniqueEntity(EId.Clock).Tags.Has<TakingTurn>();
-    
+
     private readonly string _name;
     public bool LoadedFromFile;
-    
+
     public readonly EntityStore World;
     private readonly SystemRoot _updateSystems;
     private readonly SystemRoot _renderSystems;
-    
+
     public Game(string? name)
     {
-        _name = name ?? "world";
-        
+        _name = string.IsNullOrWhiteSpace(name) ? "world" : name;
+
         World = InitWorld();
         _updateSystems = new SystemRoot(World)
         {
@@ -39,21 +39,21 @@ public class Game
         var store = new EntityStore();
         store.EventRecorder.Enabled = true;
 
-        if (!File.Exists($"{_name}.json")) return store;
+        if (!File.Exists($"Runs/{_name}.json")) return store;
 
         LoadedFromFile = true;
-        return store.LoadFromFile($"{_name}.json");
+        return store.LoadFromFile($"Runs/{_name}.json");
     }
 
     private static UpdateTick GetTick() => new();
-    
+
     public void Tick()
     {
         Console.WriteLine("Ticking UpdateSystems.");
         _updateSystems.Update(GetTick());
 
         var serializer = new EntitySerializer();
-        var writeStream = new FileStream($"{_name}.json", FileMode.Create);
+        var writeStream = new FileStream($"Runs/{_name}.json", FileMode.Create);
         serializer.WriteStore(World, writeStream);
         writeStream.Close();
     }
