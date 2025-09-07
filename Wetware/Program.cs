@@ -15,6 +15,7 @@ if (!game.LoadedFromFile) MakeTestEntities();
 for (; ; )
 {
     Game.Instance.Tick();
+    Game.Instance.Render();
     Console.ReadKey(true);
 }
 
@@ -30,11 +31,13 @@ void MakeTestEntities()
         new Name("reflex machine"),
         new Renderable(Sprite.m),
         new Energy(0),
+        new Wetware.Components.Position(9, 10),
         new Speed(12),
         Tags.Get<BlocksMovement>());
     game.World.CreateEntity(
         new Name("speed machine"),
         new Renderable(Sprite.m),
+        new Wetware.Components.Position(10, 11),
         new Energy(0),
         new Speed(16));
     game.World.CreateEntity(

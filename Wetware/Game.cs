@@ -30,7 +30,9 @@ public class Game
             new HealthRegenSystem(),
             new DoNothingSystem(),
         };
-        _renderSystems = new SystemRoot(World);
+        _renderSystems = new SystemRoot(World) {
+          new EntityRenderSystem(),
+        };
         Instance = this;
     }
 
