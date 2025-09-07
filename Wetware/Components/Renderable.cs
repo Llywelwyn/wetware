@@ -1,8 +1,9 @@
 ﻿using Friflo.Engine.ECS;
+using Wetware.Assets;
 
 namespace Wetware.Components;
 
-public struct Renderable : IComponent
+public struct Renderable(Sprite sprite) : IComponent
 {
-    public char Glyph;
+    public int Sprite = (int)sprite;
 }

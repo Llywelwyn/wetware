@@ -1,6 +1,6 @@
 namespace Wetware.Assets;
 
-enum Sprite
+public enum Sprite
 {
     // Start of CP437. Do not change.
     Transparent = 0,
