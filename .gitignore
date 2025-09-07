@@ -1,5 +1,9 @@
+# Build files
 bin/
 obj/
 /packages/
+
+# Rider
 riderModule.iml
+.idea/
 /_ReSharper.Caches/
