@@ -2,4 +2,5 @@
 
 namespace Wetware.Flags;
 
+[TagName("p")]
 public struct Player : ITag;

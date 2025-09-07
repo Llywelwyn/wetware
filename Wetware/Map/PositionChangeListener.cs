@@ -1,5 +1,4 @@
 ﻿using Friflo.Engine.ECS;
-using Wetware.Components;
 using Wetware.Flags;
 using Position = Wetware.Components.Position;
 
@@ -26,7 +25,7 @@ public class PositionChangeListener
     private void HandleComponentAdded(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
         if (e.Action == ComponentChangedAction.Update) _map[e.OldComponent<Position>()] = false;
         _map[e.Component<Position>()] = true;
     }
@@ -34,14 +33,14 @@ public class PositionChangeListener
     private void HandleComponentRemoved(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
         _map[e.OldComponent<Position>()] = false;
     }
 
     private void HandleEntityDelete(EntityDelete e)
     {
         if (!e.Entity.TryGetComponent(out Position pos)) return;
-        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
         _map[pos] = false;
     }
 }

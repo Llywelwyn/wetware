@@ -2,4 +2,5 @@
 
 namespace Wetware.Flags;
 
+[TagName("c")]
 public struct Clock : ITag;

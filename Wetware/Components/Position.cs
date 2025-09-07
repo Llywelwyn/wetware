@@ -2,7 +2,7 @@
 
 namespace Wetware.Components;
 
-
+[ComponentKey("p")]
 public struct Position(int x, int y) : IIndexedComponent<(int, int)>
 {
     public int X = x;

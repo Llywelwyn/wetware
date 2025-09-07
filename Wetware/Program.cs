@@ -30,7 +30,8 @@ void MakeTestEntities()
         new Name("reflex machine"),
         new Renderable(Sprite.m),
         new Energy(0),
-        new Speed(12));
+        new Speed(12),
+        Tags.Get<BlocksMovement>());
     game.World.CreateEntity(
         new Name("speed machine"),
         new Renderable(Sprite.m),
