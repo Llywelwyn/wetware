@@ -1,5 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using Wetware.Components;
+using Wetware.Flags;
 using Position = Wetware.Components.Position;
 
 namespace Wetware.Map;
@@ -8,7 +9,7 @@ public class PositionChangeListener
 {
     private readonly Map _map;
 
-    public PositionChangeListener(Map map) 
+    public PositionChangeListener(Map map)
     {
         _map = map;
         Subscribe();
@@ -25,22 +26,22 @@ public class PositionChangeListener
     private void HandleComponentAdded(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.TryGetComponent(out Obstruction obstruction)) return;
-        if (e.Action == ComponentChangedAction.Update) _map[e.OldComponent<Position>()] -= obstruction.Value;
-        _map[e.Component<Position>()] += obstruction.Value;
+        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        if (e.Action == ComponentChangedAction.Update) _map[e.OldComponent<Position>()] = false;
+        _map[e.Component<Position>()] = true;
     }
 
     private void HandleComponentRemoved(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.TryGetComponent(out Obstruction obstruction)) return;
-        _map[e.OldComponent<Position>()] -= obstruction.Value;
+        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        _map[e.OldComponent<Position>()] = false;
     }
 
     private void HandleEntityDelete(EntityDelete e)
     {
         if (!e.Entity.TryGetComponent(out Position pos)) return;
-        if (!e.Entity.TryGetComponent(out Obstruction obstruction)) return;
-        _map[pos] -= obstruction.Value;
+        if (!e.Entity.Tags.Has<Obstructs>()) return;
+        _map[pos] = false;
     }
 }
