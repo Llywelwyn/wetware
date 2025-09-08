@@ -8,39 +8,39 @@ public class PositionChangeListener
 {
     private readonly Map _map;
 
-    public PositionChangeListener(Map map)
+    public PositionChangeListener(Map map, EntityStore? world = null)
     {
         _map = map;
-        Subscribe();
+        Subscribe(world);
     }
 
-    private void Subscribe()
+    private void Subscribe(EntityStore? world)
     {
-        var world = Game.Instance.World;
-        world.OnComponentAdded += HandleComponentAdded;
-        world.OnComponentRemoved += HandleComponentRemoved;
-        world.OnEntityDelete += HandleEntityDelete;
+        var _world = world ?? Game.Instance.World;
+        _world.OnComponentAdded += HandleComponentAdded;
+        _world.OnComponentRemoved += HandleComponentRemoved;
+        _world.OnEntityDelete += HandleEntityDelete;
     }
 
     private void HandleComponentAdded(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
-        if (e.Action == ComponentChangedAction.Update) _map[e.OldComponent<Position>()] = false;
-        _map[e.Component<Position>()] = true;
+        var flags = e.Entity.GetBlockFlags();
+        if (e.Action == ComponentChangedAction.Update) _map.Clear(e.OldComponent<Position>(), flags);
+        _map.Set(e.Component<Position>(), flags);
     }
 
     private void HandleComponentRemoved(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
-        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
-        _map[e.OldComponent<Position>()] = false;
+        var flags = e.Entity.GetBlockFlags();
+        _map.Clear(e.OldComponent<Position>(), flags);
     }
 
     private void HandleEntityDelete(EntityDelete e)
     {
         if (!e.Entity.TryGetComponent(out Position pos)) return;
-        if (!e.Entity.Tags.Has<BlocksMovement>()) return;
-        _map[pos] = false;
+        var flags = e.Entity.GetBlockFlags();
+        _map.Clear(pos, flags);
     }
 }

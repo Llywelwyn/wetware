@@ -1,6 +1,8 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using Wetware.Components;
+using Wetware.Flags;
+using TileFlag = Wetware.Map.TileFlag;
 
 namespace Wetware;
 
@@ -21,6 +23,15 @@ public static class EntityExtensions
         }
 
         return e.HasName ? $"{e.Name.value} ({e.Id})" : $"unnamed {e.Id}";
+    }
+
+    public static TileFlag GetBlockFlags(this Entity e)
+    {
+        var flags = TileFlag.None;
+        if (e.Tags.Has<BlocksMovement>()) flags |= TileFlag.BlocksMovement;
+        if (e.Tags.Has<BlocksItems>()) flags |= TileFlag.BlocksItems;
+        if (e.Tags.Has<BlocksVision>()) flags |= TileFlag.BlocksVision;
+        return flags;
     }
 }
 
