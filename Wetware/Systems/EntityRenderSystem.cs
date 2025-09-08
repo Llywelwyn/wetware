@@ -32,8 +32,6 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     private void Render(int x, int y, int sprite)
     {
         Console.SetCursorPosition(x, y);
-        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write((char)sprite);
-        //Console.WriteLine($"drawing {(char)sprite} at ({x}, {y})");
     }
 }

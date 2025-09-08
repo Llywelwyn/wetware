@@ -44,7 +44,9 @@ void MakeTestEntities()
     game.World.CreateEntity(
         new Name("slow machine"),
         new Renderable(Sprite.m),
+        new Wetware.Components.Position(5, 19),
         new Energy(0),
         new Speed(6),
-        new Health(20, 10));
+        new Health(20, 10),
+        Tags.Get<SeenByPov, BlocksMovement>());
 }
