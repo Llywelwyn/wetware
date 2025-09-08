@@ -2,8 +2,8 @@
 
 namespace Wetware.Components;
 
-[ComponentKey("p")]
-public struct Position(int x, int y) : IIndexedComponent<(int, int)>
+[ComponentKey("o")]
+public struct OnMap(int x, int y) : IIndexedComponent<(int, int)>
 {
     public readonly int X = x;
     public readonly int Y = y;
