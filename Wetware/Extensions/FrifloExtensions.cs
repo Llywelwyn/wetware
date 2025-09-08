@@ -34,6 +34,14 @@ public static class EntityExtensions
         if (data.Tags.Has<BlocksVision>()) flags |= TileFlag.BlocksVision;
         return flags;
     }
+
+    public static Entity MoveTo(this Entity original, EntityStore world)
+    {
+        var clone = world.CreateEntity();
+        original.CopyEntity(clone);
+        original.DeleteEntity();
+        return clone;
+    }
 }
 
 public static class EntityStoreExtensions
