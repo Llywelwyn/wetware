@@ -12,14 +12,6 @@ public enum TileFlag
     BlocksItems = 1 << 3,
 }
 
-public enum Edge
-{
-    Left,
-    Right,
-    Top,
-    Bottom
-}
-
 public class Map
 {
     public readonly int Width;

@@ -7,6 +7,12 @@ using Components;
 /// </summary>
 public class MapRepository
 {
+    /// <summary>
+    /// The standard dimensions of a map. 50x32 tiles. 
+    /// 1200x768 viewport with 12x12 tiles at 2x scale.
+    /// </summary>
+    private (int X, int Y) StandardMapDimensions = (50, 32);
+
     /// <summary>The index of the currently active map. Determined by the POV entity.</summary>
     private OnMap _currentMapIndex;
 
@@ -17,6 +23,7 @@ public class MapRepository
     {
         _currentMapIndex = new(0, 0);
         _maps = new();
+        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(StandardMapDimensions.X, StandardMapDimensions.Y));
     }
 
     /// <summary>Fetches the active map.</summary>
