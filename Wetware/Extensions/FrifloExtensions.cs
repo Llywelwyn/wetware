@@ -28,9 +28,10 @@ public static class EntityExtensions
     public static TileFlag GetBlockFlags(this Entity e)
     {
         var flags = TileFlag.None;
-        if (e.Tags.Has<BlocksMovement>()) flags |= TileFlag.BlocksMovement;
-        if (e.Tags.Has<BlocksItems>()) flags |= TileFlag.BlocksItems;
-        if (e.Tags.Has<BlocksVision>()) flags |= TileFlag.BlocksVision;
+        var data = e.Data;
+        if (data.Tags.Has<BlocksMovement>()) flags |= TileFlag.BlocksMovement;
+        if (data.Tags.Has<BlocksItems>()) flags |= TileFlag.BlocksItems;
+        if (data.Tags.Has<BlocksVision>()) flags |= TileFlag.BlocksVision;
         return flags;
     }
 }
