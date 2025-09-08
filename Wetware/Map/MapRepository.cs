@@ -1,5 +1,6 @@
 namespace Wetware.Map;
 using Components;
+using Friflo.Engine.ECS;
 
 /// <summary>
 /// Map storage. Stores all game maps in a Dictionary indexed by their (X, Y) position in the world, as well as the index of the
@@ -19,11 +20,14 @@ public class MapRepository
     /// <summary>All game maps indexed by position in the world.</summary>
     private readonly Dictionary<(int, int), Map> _maps;
 
-    public MapRepository()
+    private readonly EntityStore _world;
+
+    public MapRepository(EntityStore world)
     {
+        _world = world;
         _currentMapIndex = new(0, 0);
         _maps = new();
-        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(_currentMapIndex, StandardMapDimensions.X, StandardMapDimensions.Y));
+        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(_currentMapIndex, StandardMapDimensions.X, StandardMapDimensions.Y, _world));
     }
 
     /// <summary>Fetches the active map.</summary>
