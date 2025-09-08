@@ -1,5 +1,4 @@
 ﻿using Friflo.Engine.ECS;
-using Wetware.Flags;
 using Position = Wetware.Components.Position;
 
 namespace Wetware.Map;
@@ -13,6 +12,9 @@ public class PositionChangeListener
         _map = map;
         Subscribe(world);
     }
+
+    // TODO: This listener should be moved to the MapRepository, and query the OnMap value of the entity,
+    // pushing flag changes to that map. Right now, each map has its own listener, which is overly complex.
 
     private void Subscribe(EntityStore? world)
     {
