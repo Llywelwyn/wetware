@@ -3,6 +3,7 @@ using Friflo.Engine.ECS.Serialize;
 using Friflo.Engine.ECS.Systems;
 using Wetware.Flags;
 using Wetware.Globals;
+using Wetware.Map;
 using Wetware.Systems;
 
 namespace Wetware;
@@ -16,6 +17,7 @@ public class Game
     public bool LoadedFromFile;
 
     public readonly EntityStore World;
+    public readonly MapRepository MapRepository;
     private readonly SystemRoot _updateSystems;
     private readonly SystemRoot _renderSystems;
 
@@ -24,15 +26,19 @@ public class Game
         _name = string.IsNullOrWhiteSpace(name) ? "world" : name;
 
         World = InitWorld();
+        MapRepository = new();
+
         _updateSystems = new SystemRoot(World)
         {
             new EnergySystem(),
             new HealthRegenSystem(),
             new DoNothingSystem(),
         };
+
         _renderSystems = new SystemRoot(World) {
           new EntityRenderSystem(),
         };
+
         Instance = this;
     }
 
