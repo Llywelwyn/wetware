@@ -25,6 +25,9 @@ public static class EntityExtensions
         return e.HasName ? $"{e.Name.value} ({e.Id})" : $"unnamed {e.Id}";
     }
 
+    /// <summary>
+    /// Collects a TileFlag bitarray from an Entity's EntityData tags.
+    /// </summary>
     public static TileFlag GetBlockFlags(this Entity e)
     {
         var flags = TileFlag.None;
@@ -35,6 +38,13 @@ public static class EntityExtensions
         return flags;
     }
 
+    /// <summary>
+    /// Moves an Entity from one EntityStore to another, sort of. This method makes an exact clone of an Entity
+    /// in another EntityStore, and then deletes the original entity.
+    /// </summary>
+    /// <remarks>
+    /// Be aware of any listeners for OnDelete/OnComponentRemoved. Otherwise, functionally a Move.
+    /// </remarks>
     public static Entity MoveTo(this Entity original, EntityStore world)
     {
         var clone = world.CreateEntity();
