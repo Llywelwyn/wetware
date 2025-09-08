@@ -1,5 +1,6 @@
 ﻿using Position = Wetware.Components.Position;
 using Friflo.Engine.ECS;
+using Wetware.Components;
 
 namespace Wetware.Map;
 
@@ -14,13 +15,15 @@ public enum TileFlag
 
 public class Map
 {
+    private readonly OnMap _index;
     public readonly int Width;
     public readonly int Height;
     public TileFlag[,] _tiles;
     private readonly PositionChangeListener _listener;
 
-    public Map(int width, int height, EntityStore? world = null)
+    public Map(OnMap id, int width, int height, EntityStore? world = null)
     {
+        _index = id;
         Width = width;
         Height = height;
         _tiles = new TileFlag[width, height];

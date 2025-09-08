@@ -23,7 +23,7 @@ public class MapRepository
     {
         _currentMapIndex = new(0, 0);
         _maps = new();
-        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(StandardMapDimensions.X, StandardMapDimensions.Y));
+        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(_currentMapIndex, StandardMapDimensions.X, StandardMapDimensions.Y));
     }
 
     /// <summary>Fetches the active map.</summary>
