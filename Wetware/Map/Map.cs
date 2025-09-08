@@ -15,10 +15,25 @@ public enum TileFlag
 
 public class Map
 {
+    /// <summary>MapRepository index (and position in the World).</summary>
     private readonly OnMap _index;
+
+    /// <summary>Map width in tiles.</summary>
     public readonly int Width;
+
+    /// <summary>Map height in tiles.</summary>
     public readonly int Height;
+
+    /// <summary>
+    /// An index of important flags set for each tile, like whether the given index blocks
+    /// movement or vision.
+    /// </summary>
+    /// <remarks>
+    /// Kept up to date via ECS event listeners for OnComponentChanged and EntityDeleted.
+    /// </remarks>
     public TileFlag[,] _tiles;
+
+    /// <summary>Initialises event listeners for maintaining the _tiles index.</summary>
     private readonly PositionChangeListener _listener;
 
     public Map(OnMap id, int width, int height, EntityStore? world = null)
@@ -30,14 +45,18 @@ public class Map
         _listener = new PositionChangeListener(this, world);
     }
 
+    /// <summary>Checks if a given position is within the map bounds.</summary>
     public bool InBounds(Position pos) => pos.X >= 0 && pos.X < Width && pos.Y >= 0 && pos.Y < Height;
 
+    /// <summary>Sets a TileFlag for the given location.</summary>
     public void Set(Position pos, TileFlag flag) => Set(pos.X, pos.Y, flag);
     public void Set(int x, int y, TileFlag flag) => _tiles[x, y] |= flag;
 
+    /// <summary>Checks for a TileFlag at the given location.</summary>
     public bool Has(Position pos, TileFlag flag) => Has(pos.X, pos.Y, flag);
     public bool Has(int x, int y, TileFlag flag) => (_tiles[x, y] & flag) != 0;
 
+    /// <summary>Clears a TileFlag at the given location.</summary>
     public void Clear(Position pos, TileFlag flag) => Clear(pos.X, pos.Y, flag);
     public void Clear(int x, int y, TileFlag flag) => _tiles[x, y] &= ~flag;
 
