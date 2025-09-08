@@ -26,7 +26,7 @@ public class Game
         _name = string.IsNullOrWhiteSpace(name) ? "world" : name;
 
         World = InitWorld();
-        MapRepository = new();
+        MapRepository = new(World);
 
         _updateSystems = new SystemRoot(World)
         {

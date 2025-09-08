@@ -20,6 +20,8 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     {
         Debug.SystemBoundaryStart(nameof(EntityRenderSystem));
 
+        Console.Clear();
+
         Query.ForEachEntity((ref Position position, ref Renderable renderable, Entity e) =>
         {
             Render(position.X, position.Y, renderable.Sprite);
@@ -29,6 +31,9 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     // TODO: actually render to a ScreenSurface.
     private void Render(int x, int y, int sprite)
     {
-        Console.WriteLine($"drawing {sprite} at ({x}, {y})");
+        Console.SetCursorPosition(x, y);
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write((char)sprite);
+        //Console.WriteLine($"drawing {(char)sprite} at ({x}, {y})");
     }
 }
