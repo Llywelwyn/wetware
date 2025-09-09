@@ -10,8 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="coverlet.collector" Version="6.0.2" />
         <PackageReference Include="Friflo.Engine.ECS" Version="3.4.2" />
+        <PackageReference Include="MessagePack" Version="3.1.4" />
+        <PackageReference Include="MessagePack.Annotations" Version="3.1.4" />
     </ItemGroup>
 
 </Project>

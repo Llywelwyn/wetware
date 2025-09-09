@@ -1,8 +1,7 @@
 ﻿using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Serialize;
 using Friflo.Engine.ECS.Systems;
 using Wetware.Map;
-using Wetware.Systems;
+using Wetware.Serializer;
 
 namespace Wetware;
 
@@ -10,7 +9,7 @@ public class Game
 {
     internal static Game Instance = null!;
 
-    private readonly string _name;
+    public readonly string Name;
     public bool LoadedFromFile;
 
     public bool ClockTurn = true;
@@ -21,9 +20,8 @@ public class Game
 
     public Game(string? name)
     {
-        _name = string.IsNullOrWhiteSpace(name) ? "world" : name;
-
-        World = InitWorld();
+        Name = string.IsNullOrWhiteSpace(name) ? "world" : name;
+        World = CreateStore();
         MapRepository = new(World);
 
         _updateSystems = new SystemRoot(World)
@@ -39,18 +37,16 @@ public class Game
             //new EntityRenderSystem(),
         };
 
+        if (File.Exists($"Runs/{Name}")) WetwareSerializer.DeserializeState(this);
+
         Instance = this;
     }
 
-    private EntityStore InitWorld()
+    private EntityStore CreateStore()
     {
         var store = new EntityStore();
         store.EventRecorder.Enabled = true;
-
-        if (!File.Exists($"Runs/{_name}.json")) return store;
-
-        LoadedFromFile = true;
-        return store.LoadFromFile($"Runs/{_name}.json");
+        return store;
     }
 
     private static UpdateTick GetTick() => new();
@@ -59,11 +55,7 @@ public class Game
     {
         Console.WriteLine("Ticking UpdateSystems.");
         _updateSystems.Update(GetTick());
-
-        var serializer = new EntitySerializer();
-        var writeStream = new FileStream($"Runs/{_name}.json", FileMode.Create);
-        serializer.WriteStore(World, writeStream);
-        writeStream.Close();
+        WetwareSerializer.SerializeState();
     }
 
     public void Render()
