@@ -25,28 +25,28 @@ void MakeTestEntities()
         new UniqueEntity(EId.Clock),
         new Name(EId.Clock),
         new Energy(0),
-        new Speed(12),
+        new Speed(100),
         Tags.Get<Clock>());
     game.World.CreateEntity(
         new Name("reflex machine"),
         new Renderable(Sprite.m),
         new Energy(0),
         new Wetware.Components.Position(9, 10),
-        new Speed(12),
+        new Speed(100),
         Tags.Get<SeenByPov>());
     game.World.CreateEntity(
         new Name("speed machine"),
         new Renderable(Sprite.m),
         new Wetware.Components.Position(10, 11),
         new Energy(0),
-        new Speed(16),
+        new Speed(110),
         Tags.Get<SeenByPov>());
     game.World.CreateEntity(
         new Name("slow machine"),
         new Renderable(Sprite.m),
         new Wetware.Components.Position(5, 19),
         new Energy(0),
-        new Speed(6),
+        new Speed(60),
         new Health(20, 10),
         Tags.Get<SeenByPov, BlocksMovement>());
 }

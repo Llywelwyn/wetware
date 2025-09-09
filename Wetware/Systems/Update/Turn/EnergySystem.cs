@@ -4,7 +4,7 @@ using Wetware.Components;
 using Wetware.Config;
 using Wetware.Globals;
 
-namespace Wetware.Systems;
+namespace Wetware.Systems.Update.Turn;
 
 /// <summary>
 /// Adds energy to entities based on their speed.
@@ -13,27 +13,28 @@ namespace Wetware.Systems;
 /// <remarks>
 /// Save for exceptional circumstances, this should be the first system to run.
 /// </remarks>
-public class GrantEnergySystem : QuerySystem<Energy, Speed>
+public class EnergySystem : QuerySystem<Energy, Speed>
 {
     /// <summary>Returns True if the system should run this tick. Only runs on ClockTurns.</summary>
     private bool ShouldRun()
     {
-        if (!Game.ClockTurn)
+        if (!Game.Instance.ClockTurn)
         {
-            Debug.Print($"=== Not a clock turn. Skipping {nameof(GrantEnergySystem)}.");
+            Debug.Print($"=== Not a clock turn. Skipping {nameof(EnergySystem)}.");
             return false;
         }
-        Debug.SystemBoundaryStart(nameof(GrantEnergySystem));
+        Debug.SystemBoundaryStart(nameof(EnergySystem));
         return true;
     }
 
     protected override void OnUpdate()
     {
         if (!ShouldRun()) return;
-
         Query.ForEachEntity((ref Energy energy, ref Speed speed, Entity e) =>
         {
             energy.Value += SpeedToActionPoints(ref speed);
+            Debug.Print($"Granting {e.DebugName()} energy.");
+            Debug.Print($"{energy.Value}");
             if (energy.Value > 0) TurnQueue.Enqueue(e.Id, energy.Value);
         });
         CommandBuffer.Playback();

@@ -3,25 +3,35 @@ using Friflo.Engine.ECS;
 using Wetware.Globals;
 using Wetware.Flags;
 using Wetware.Components;
+using Wetware.Config;
 
-namespace Wetware.Systems;
+namespace Wetware.Systems.Update;
 
 public class EntityTurnSystem : QuerySystem
 {
     protected override void OnUpdate()
     {
+        Debug.SystemBoundaryStart(nameof(EntityTurnSystem));
+
         if (TurnQueue.Next() is not int id) return;
 
         var entity = Query.Store.GetEntityById(id);
         if (entity.IsNull) return;
 
+        Debug.Print($"{entity.DebugName()}'s turn.");
+
         var data = entity.Data;
 
         if (data.Tags.Has<Clock>())
         {
-            entity.AddComponent<Energy>(new Energy(0));
+            Debug.Print($"{entity.DebugName()} is the turn clock. Spending turn setting ClockTurn to true.");
+            UseEnergy(entity, 1000);
             Game.Instance.ClockTurn = true;
+            return;
         }
+
+        UseEnergy(entity, 1000);
+        Debug.Print($"{entity.DebugName()} spent its turn doing nothing (-1000).");
 
         if (!data.TryGet<Brain>(out var brain)) return;
 
@@ -33,7 +43,8 @@ public class EntityTurnSystem : QuerySystem
     private void UseEnergy(Entity entity, int amount)
     {
         var energy = entity.GetComponent<Energy>();
-        energy.Value -= amount;
-        TurnQueue.Enqueue(entity.Id, energy.Value);
+        var newValue = energy.Value - amount;
+        entity.AddComponent<Energy>(new Energy(newValue));
+        TurnQueue.Enqueue(entity.Id, newValue);
     }
 }

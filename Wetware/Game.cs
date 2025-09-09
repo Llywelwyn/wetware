@@ -28,13 +28,15 @@ public class Game
 
         _updateSystems = new SystemRoot(World)
         {
-            new EnergySystem(),
-            new HealthRegenSystem(),
-            new DoNothingSystem(),
+            new Systems.Update.Turn.EnergySystem(),
+            new Systems.Update.Turn.HealthRegenSystem(),
+            new Systems.Update.Turn.FinalTurnSystem(),
+            new Systems.Update.EntityTurnSystem(),
         };
 
-        _renderSystems = new SystemRoot(World) {
-          new EntityRenderSystem(),
+        _renderSystems = new SystemRoot(World)
+        {
+            //new EntityRenderSystem(),
         };
 
         Instance = this;
