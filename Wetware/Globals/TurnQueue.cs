@@ -1,3 +1,5 @@
+using Wetware.Serializer;
+
 namespace Wetware.Globals;
 
 public static class TurnQueue
@@ -22,13 +24,14 @@ public static class TurnQueue
     public static void Enqueue(int id, int energy)
     {
         if (energy < 0) return;
-        _entityIndex[id] = energy;
+        _entityIndex[id] = -energy;
         _queue.Enqueue(id, -energy);
     }
 
     /// <summary>Fetch the next valid entity in the queue, or null if empty.</summary>
     public static int? Next()
     {
+        PrintQueue();
         while (!IsEmpty)
         {
             _queue.TryDequeue(out int id, out int energy);
@@ -54,5 +57,30 @@ public static class TurnQueue
     {
         _queue.Clear();
         _entityIndex.Clear();
+    }
+
+    public static void PrintQueue()
+    {
+        Console.WriteLine("TurnQueue (latest values only):");
+        foreach (var kv in _entityIndex.OrderByDescending(kv => -kv.Value))
+        {
+            Console.WriteLine($"id: {kv.Key}, energy: {-kv.Value}");
+        }
+    }
+
+    public static IEnumerable<TurnQueueEntry> GetSnapshot()
+    {
+        foreach (var kv in _entityIndex)
+            yield return new TurnQueueEntry { Id = kv.Key, Priority = -kv.Value };
+    }
+
+    public static void LoadSnapshot(List<TurnQueueEntry> snapshot)
+    {
+        Clear();
+        foreach (var entry in snapshot)
+        {
+            Console.WriteLine($"{entry.Id}: {entry.Priority}");
+            Enqueue(entry.Id, entry.Priority);
+        }
     }
 }
