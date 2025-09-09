@@ -3,6 +3,7 @@
 public enum DebugFlag
 {
     SystemBoundary,
+    AdditionalJsonSerialization,
 }
 
 public static class Debug
@@ -11,9 +12,10 @@ public static class Debug
     private static readonly Dictionary<DebugFlag, bool> Flags = new()
     {
         [DebugFlag.SystemBoundary] = false,
+        [DebugFlag.AdditionalJsonSerialization] = false,
     };
 
-    private static bool IsEnabled(DebugFlag name)
+    public static bool IsEnabled(DebugFlag name)
     {
         if (!Flags.TryGetValue(name, out var value))
             throw new ArgumentException($"Unknown flag: {name}.");
