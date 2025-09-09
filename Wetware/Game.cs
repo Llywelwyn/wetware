@@ -1,8 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Engine.ECS.Systems;
-using Wetware.Flags;
-using Wetware.Globals;
 using Wetware.Map;
 using Wetware.Systems;
 
@@ -11,11 +9,11 @@ namespace Wetware;
 public class Game
 {
     internal static Game Instance = null!;
-    public static bool ClockTurn => Instance.World.GetUniqueEntity(EId.Clock).Tags.Has<TakingTurn>();
 
     private readonly string _name;
     public bool LoadedFromFile;
 
+    public bool ClockTurn = true;
     public readonly EntityStore World;
     public readonly MapRepository MapRepository;
     private readonly SystemRoot _updateSystems;
