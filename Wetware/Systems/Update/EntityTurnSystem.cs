@@ -44,7 +44,7 @@ public class EntityTurnSystem : QuerySystem
     {
         var energy = entity.GetComponent<Energy>();
         var newValue = energy.Value - amount;
-        entity.AddComponent<Energy>(new Energy(newValue));
+        _ = entity.AddComponent(new Energy(newValue));
         TurnQueue.Enqueue(entity.Id, newValue);
     }
 }
