@@ -35,12 +35,12 @@ public class EntityTurnSystem : QuerySystem
 
         if (!data.TryGet<Brain>(out var brain)) return;
 
-        // At this point, we have our Entity, EntityData, and Entity's Brain component,
+        // TODO: At this point, we have our Entity, EntityData, and Entity's Brain component,
         // and our entity can act. Whatever action it takes, UseEnergy(entity, <amount>).
         return;
     }
 
-    private void UseEnergy(Entity entity, int amount)
+    private static void UseEnergy(Entity entity, int amount)
     {
         var energy = entity.GetComponent<Energy>();
         var newValue = energy.Value - amount;
