@@ -4,7 +4,7 @@ using Wetware.Components;
 using Wetware.Flags;
 using TileFlag = Wetware.Map.TileFlag;
 
-namespace Wetware;
+namespace Wetware.Extensions;
 
 public static class EntityExtensions
 {

@@ -1,9 +1,12 @@
 using Friflo.Engine.ECS.Systems;
 using Friflo.Engine.ECS;
 using Wetware.Globals;
+using Wetware.Config;
 using Wetware.Flags;
 using Wetware.Components;
-using Wetware.Config;
+using Position = Wetware.Components.Position;
+using Wetware.Map;
+using Wetware.Extensions;
 
 namespace Wetware.Systems.Update;
 
@@ -31,13 +34,28 @@ public class EntityTurnSystem : QuerySystem
         }
 
         UseEnergy(entity, 1000);
-        Debug.Print($"{entity.DebugName()} spent its turn doing nothing (-1000).");
 
         if (!data.TryGet<Brain>(out var brain)) return;
 
-        // TODO: At this point, we have our Entity, EntityData, and Entity's Brain component,
-        // and our entity can act. Whatever action it takes, UseEnergy(entity, <amount>).
-        return;
+        if (!brain.Wanders) return;
+
+        if (!data.TryGet<Position>(out var pos)) return;
+
+        Map.Map map = Game.Instance.MapRepository.CurrentMap();
+
+        var possibleMoves = new List<Position>();
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+                var position = new Position(pos.X + dx, pos.Y + dy);
+                if (map.InBounds(position) && !map.Has(position, TileFlag.BlocksMovement)) possibleMoves.Add(position);
+            }
+        }
+
+        if (possibleMoves.Count > 0)
+            entity.AddComponent(possibleMoves[new Random().Next(possibleMoves.Count)]);
     }
 
     private static void UseEnergy(Entity entity, int amount)

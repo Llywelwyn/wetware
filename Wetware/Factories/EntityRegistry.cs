@@ -1,7 +1,7 @@
 using Wetware.Components;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
-using Wetware;
+using Wetware.Extensions;
 
 public class EntityRegistry
 {
