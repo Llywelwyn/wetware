@@ -14,15 +14,11 @@ namespace Wetware.Systems.Render;
 /// <remarks>RenderSystem - no data should change here, save for Render-specific flags.</remarks>
 public class EntityRenderSystem : QuerySystem<Position, Renderable>
 {
-    public EntityRenderSystem() => Filter.AllTags(Tags.Get<SeenByPov>());
+    // TODO: Uncomment this once FOV is in.
+    //public EntityRenderSystem() => Filter.AllTags(Tags.Get<SeenByPov>());
 
     protected override void OnUpdate()
     {
-        Raylib.DrawRectangleLines(1.Scale(),
-                                  1.Scale(),
-                                  Game.Instance.MapRepository.CurrentMap().Width.Scale(),
-                                  Game.Instance.MapRepository.CurrentMap().Height.Scale(),
-                                  Color.Red);
         Query.ForEachEntity((ref Position position, ref Renderable renderable, Entity e) =>
         {
             Render(position.X, position.Y, renderable.Sprite);
@@ -32,7 +28,7 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     // TODO: actually render to a ScreenSurface.
     private void Render(int x, int y, int sprite)
     {
-        Raylib.DrawText("@", x.Scale(), y.Scale(), 1.Scale(), Color.Black);
+        Raylib.DrawRectangle(x.Scale() + 1.Scale(), y.Scale() + 1.Scale(), 1.Scale(), 1.Scale(), Color.Black);
     }
 }
 

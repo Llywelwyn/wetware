@@ -15,7 +15,8 @@ class BackgroundScreen(Position origin, Position size) : Screen(origin, size)
 
     public override void Render()
     {
-        Raylib.ClearBackground(Color.Maroon);
+        Raylib.ClearBackground(Color.RayWhite);
+        Raylib.DrawRectangle(_origin.X * 32, _origin.Y * 32, _size.X * 32, _size.Y * 32, Color.DarkBrown);
     }
 }
 
@@ -36,6 +37,7 @@ class MapScreen : Screen
 
     public override void Render()
     {
+        Raylib.DrawRectangle(_origin.X * 32, _origin.Y * 32, _size.X * 32, _size.Y * 32, Color.RayWhite);
         systems.Update(new UpdateTick());
     }
 }

@@ -10,11 +10,11 @@ using Raylib_cs;
 Console.WriteLine("a name?");
 var name = Console.ReadLine();
 
+Raylib.InitWindow(1920, 1056, "wetware");
 var game = new Game(name);
 
 if (!game.LoadedFromFile) MakeTestEntities();
 
-Raylib.InitWindow(1920, 1080, "wetware");
 var tick = true;
 
 while (!Raylib.WindowShouldClose())
