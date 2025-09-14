@@ -1,11 +1,11 @@
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
-using Wetware.Config;
 using Wetware.Flags;
 using Wetware.Components;
 using Position = Wetware.Components.Position;
+using Raylib_cs;
 
-namespace Wetware.Systems;
+namespace Wetware.Systems.Render;
 
 /// <summary>
 /// Queries Renderable entities with a Position. Filters out anything not currently seen by the player,
@@ -18,10 +18,11 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
 
     protected override void OnUpdate()
     {
-        Debug.SystemBoundaryStart(nameof(EntityRenderSystem));
-
-        Console.Clear();
-
+        Raylib.DrawRectangleLines(1.Scale(),
+                                  1.Scale(),
+                                  Game.Instance.MapRepository.CurrentMap().Width.Scale(),
+                                  Game.Instance.MapRepository.CurrentMap().Height.Scale(),
+                                  Color.Red);
         Query.ForEachEntity((ref Position position, ref Renderable renderable, Entity e) =>
         {
             Render(position.X, position.Y, renderable.Sprite);
@@ -31,7 +32,14 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     // TODO: actually render to a ScreenSurface.
     private void Render(int x, int y, int sprite)
     {
-        Console.SetCursorPosition(x, y);
-        Console.Write((char)sprite);
+        Raylib.DrawText("@", x.Scale(), y.Scale(), 1.Scale(), Color.Black);
     }
+}
+
+public static class IntExtensions
+{
+    private static readonly int SpriteSize = 16;
+    private static readonly int ScaleFactor = 2;
+
+    public static int Scale(this int i) => i * SpriteSize * ScaleFactor;
 }

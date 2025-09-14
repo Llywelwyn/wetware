@@ -1,6 +1,7 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Wetware.Map;
+using Wetware.Screens;
 using Wetware.Serializer;
 
 namespace Wetware;
@@ -16,13 +17,16 @@ public class Game
     public readonly EntityStore World;
     public readonly MapRepository MapRepository;
     private readonly SystemRoot _updateSystems;
-    private readonly SystemRoot _renderSystems;
+
+    public readonly ScreenManager ScreenManager;
 
     public Game(string? name)
     {
+        Instance = this;
         Name = string.IsNullOrWhiteSpace(name) ? "world" : name;
         World = CreateStore();
         MapRepository = new(World);
+        ScreenManager = new();
 
         _updateSystems = new SystemRoot(World)
         {
@@ -32,17 +36,11 @@ public class Game
             new Systems.Update.EntityTurnSystem(),
         };
 
-        _renderSystems = new SystemRoot(World)
-        {
-            //new EntityRenderSystem(),
-        };
-
         if (File.Exists($"Runs/{Name}")) WetwareSerializer.DeserializeState(this);
 
-        Instance = this;
     }
 
-    private EntityStore CreateStore()
+    private static EntityStore CreateStore()
     {
         var store = new EntityStore();
         store.EventRecorder.Enabled = true;
@@ -58,8 +56,5 @@ public class Game
         WetwareSerializer.SerializeState();
     }
 
-    public void Render()
-    {
-        _renderSystems.Update(GetTick());
-    }
+    public void Render() => ScreenManager.Render();
 }
