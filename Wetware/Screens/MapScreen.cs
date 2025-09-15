@@ -1,3 +1,4 @@
+using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Raylib_cs;
@@ -15,19 +16,27 @@ class BackgroundScreen(Position origin, Position size) : Screen(origin, size)
 
     public override void Render()
     {
+        var tileSize = Game.Instance.ScreenManager.Atlas.TileSize;
         Raylib.ClearBackground(Color.RayWhite);
-        Raylib.DrawRectangle(_origin.X * 32, _origin.Y * 32, _size.X * 32, _size.Y * 32, Color.DarkBrown);
+        Raylib.DrawRectangle(
+                _origin.X * (int)tileSize.X,
+                _origin.Y * (int)tileSize.Y,
+                _size.X * (int)tileSize.X,
+                _size.Y * (int)tileSize.Y,
+                Color.DarkBrown);
     }
 }
 
 class MapScreen : Screen
 {
-    private static readonly SystemRoot systems = [];
+    private static readonly SystemRoot m_systems = [];
+    private readonly Vector2 m_tileSize;
 
-    public MapScreen(Position origin, Position size) : base(origin, size)
+    public MapScreen(Position origin, Position size, Vector2 tileSize) : base(origin, size)
     {
-        systems.AddStore(Game.Instance.World);
-        systems.Add(new EntityRenderSystem());
+        m_systems.AddStore(Game.Instance.World);
+        m_systems.Add(new EntityRenderSystem());
+        m_tileSize = tileSize;
     }
 
     public override void HandleInput()
@@ -37,7 +46,12 @@ class MapScreen : Screen
 
     public override void Render()
     {
-        Raylib.DrawRectangle(_origin.X * 32, _origin.Y * 32, _size.X * 32, _size.Y * 32, Color.RayWhite);
-        systems.Update(new UpdateTick());
+        Raylib.DrawRectangle(
+                _origin.X * (int)m_tileSize.X,
+                _origin.Y * (int)m_tileSize.Y,
+                _size.X * (int)m_tileSize.X,
+                _size.Y * (int)m_tileSize.Y,
+                Color.RayWhite);
+        m_systems.Update(new UpdateTick());
     }
 }

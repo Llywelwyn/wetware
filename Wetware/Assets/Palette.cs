@@ -1,23 +1,41 @@
+using Raylib_cs;
+
 namespace Wetware.Assets;
 
 public static class Palette
 {
-    public const string DarkRed = "#a64a2e";
-    public const string Red = "#d74200";
-    public const string DarkOrange = "#f15f22";
-    public const string Orange = "#e99f10";
-    public const string Brown = "#98875f";
-    public const string Gold = "#cfc041";
-    public const string DarkGreen = "#009403";
-    public const string Green = "#00c420";
-    public const string DarkBlue = "#0048bd";
-    public const string Blue = "#0096ff";
-    public const string DarkCyan = "#40a4b9";
-    public const string Cyan = "#77bfcf";
-    public const string DarkMagenta = "#b154cf";
-    public const string Magenta = "#da5bd6";
-    public const string Background = "#0f3b3a";
-    public const string DarkGrey = "#155352";
-    public const string Grey = "#b1c9c3";
-    public const string White = "#ffffff";
+    #pragma warning disable IDE0055
+    public static readonly Color DarkRed =     FromHex("#a64a2e");
+    public static readonly Color Red =         FromHex("#d74200");
+    public static readonly Color DarkOrange =  FromHex("#f15f22");
+    public static readonly Color Orange =      FromHex("#e99f10");
+    public static readonly Color Brown =       FromHex("#98875f");
+    public static readonly Color Gold =        FromHex("#cfc041");
+    public static readonly Color DarkGreen =   FromHex("#009403");
+    public static readonly Color Green =       FromHex("#00c420");
+    public static readonly Color DarkBlue =    FromHex("#0048bd");
+    public static readonly Color Blue =        FromHex("#0096ff");
+    public static readonly Color DarkCyan =    FromHex("#40a4b9");
+    public static readonly Color Cyan =        FromHex("#77bfcf");
+    public static readonly Color DarkMagenta = FromHex("#b154cf");
+    public static readonly Color Magenta =     FromHex("#da5bd6");
+    public static readonly Color Background =  FromHex("#0f3b3a");
+    public static readonly Color DarkGrey =    FromHex("#155352");
+    public static readonly Color Grey =        FromHex("#b1c9c3");
+    public static readonly Color White =       FromHex("#ffffff");
+    #pragma warning restore IDE0055
+
+    public static Color FromHex(string hex)
+    {
+        if (hex.StartsWith('#')) hex = hex[1..];
+
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        byte a = (hex.Length == 8)
+            ? byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber)
+            : (byte)255;
+
+        return new Color(r, g, b, a);
+    }
 }

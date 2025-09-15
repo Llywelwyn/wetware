@@ -21,21 +21,11 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     {
         Query.ForEachEntity((ref Position position, ref Renderable renderable, Entity e) =>
         {
-            Render(position.X, position.Y, renderable.Sprite);
+            Game.Instance.ScreenManager.Atlas.Draw(
+                renderable.Sprite,
+                new System.Numerics.Vector2(position.X, position.Y),
+                renderable.Color
+            );
         });
     }
-
-    // TODO: actually render to a ScreenSurface.
-    private void Render(int x, int y, int sprite)
-    {
-        Raylib.DrawRectangle(x.Scale() + 1.Scale(), y.Scale() + 1.Scale(), 1.Scale(), 1.Scale(), Color.Black);
-    }
-}
-
-public static class IntExtensions
-{
-    private static readonly int SpriteSize = 16;
-    private static readonly int ScaleFactor = 2;
-
-    public static int Scale(this int i) => i * SpriteSize * ScaleFactor;
 }
