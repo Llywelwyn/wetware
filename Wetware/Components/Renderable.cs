@@ -12,5 +12,4 @@ public struct Renderable(Sprite sprite, Color color) : IComponent
 
     [Friflo.Json.Fliox.Serialize("c")]
     public Color Color = color;
-
 }

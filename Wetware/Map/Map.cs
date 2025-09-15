@@ -1,6 +1,8 @@
 ﻿using Position = Wetware.Components.Position;
 using Friflo.Engine.ECS;
 using Wetware.Components;
+using Wetware.Assets;
+using Wetware.Flags;
 
 namespace Wetware.Map;
 
@@ -43,6 +45,23 @@ public class Map
         Height = height;
         _tiles = new TileFlag[width, height];
         _listener = new PositionChangeListener(this, world);
+
+        var rng = new Random();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var color = rng.NextDouble() < 0.25 ? Palette.Red : Palette.Brown;
+                if (rng.NextDouble() < 0.3)
+                {
+                    world.CreateEntity(new Renderable(Sprite.Wall, color), new Position(x, y), Tags.Get<BlocksMovement>());
+                }
+                else
+                {
+                    world.CreateEntity(new Renderable(Sprite.Floor, color), new Position(x, y));
+                }
+            }
+        }
     }
 
     /// <summary>Checks if a given position is within the map bounds.</summary>

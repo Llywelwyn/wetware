@@ -4,6 +4,7 @@ using Wetware.Flags;
 using Wetware.Components;
 using Position = Wetware.Components.Position;
 using Raylib_cs;
+using System.Numerics;
 
 namespace Wetware.Systems.Render;
 
@@ -12,7 +13,7 @@ namespace Wetware.Systems.Render;
 /// and renders to the screen.
 /// </summary>
 /// <remarks>RenderSystem - no data should change here, save for Render-specific flags.</remarks>
-public class EntityRenderSystem : QuerySystem<Position, Renderable>
+public class EntityRenderSystem(Position origin, Position size) : QuerySystem<Position, Renderable>
 {
     // TODO: Uncomment this once FOV is in.
     //public EntityRenderSystem() => Filter.AllTags(Tags.Get<SeenByPov>());
@@ -21,11 +22,14 @@ public class EntityRenderSystem : QuerySystem<Position, Renderable>
     {
         Query.ForEachEntity((ref Position position, ref Renderable renderable, Entity e) =>
         {
-            Game.Instance.ScreenManager.Atlas.Draw(
-                renderable.Sprite,
-                new System.Numerics.Vector2(position.X, position.Y),
-                renderable.Color
-            );
+            if (position.X <= size.X || position.Y <= size.Y)
+            {
+                Game.Instance.ScreenManager.Atlas.Draw(
+                    renderable.Sprite,
+                    new Vector2(position.X, position.Y) + new Vector2(origin.X, origin.Y),
+                    renderable.Color
+                    );
+            }
         });
     }
 }

@@ -2,6 +2,7 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Raylib_cs;
+using Wetware.Assets;
 using Wetware.Systems.Render;
 using Position = Wetware.Components.Position;
 
@@ -17,13 +18,13 @@ class BackgroundScreen(Position origin, Position size) : Screen(origin, size)
     public override void Render()
     {
         var tileSize = Game.Instance.ScreenManager.Atlas.TileSize;
-        Raylib.ClearBackground(Color.RayWhite);
+        Raylib.ClearBackground(Palette.Background);
         Raylib.DrawRectangle(
                 _origin.X * (int)tileSize.X,
                 _origin.Y * (int)tileSize.Y,
                 _size.X * (int)tileSize.X,
                 _size.Y * (int)tileSize.Y,
-                Color.DarkBrown);
+                Palette.DarkGrey);
     }
 }
 
@@ -35,7 +36,7 @@ class MapScreen : Screen
     public MapScreen(Position origin, Position size, Vector2 tileSize) : base(origin, size)
     {
         m_systems.AddStore(Game.Instance.World);
-        m_systems.Add(new EntityRenderSystem());
+        m_systems.Add(new EntityRenderSystem(origin, size));
         m_tileSize = tileSize;
     }
 
@@ -51,7 +52,7 @@ class MapScreen : Screen
                 _origin.Y * (int)m_tileSize.Y,
                 _size.X * (int)m_tileSize.X,
                 _size.Y * (int)m_tileSize.Y,
-                Color.RayWhite);
+                Palette.Background);
         m_systems.Update(new UpdateTick());
     }
 }

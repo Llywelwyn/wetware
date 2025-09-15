@@ -5,6 +5,7 @@ namespace Wetware.Assets;
 
 public enum Sprite
 {
+    Floor = 183,
     Player = 205,
     WallTop = 301,
     Wall = 302,
