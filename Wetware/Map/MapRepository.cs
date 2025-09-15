@@ -13,27 +13,27 @@ public class MapRepository
     /// The standard dimensions of a map. 50x32 tiles. 
     /// 1200x768 viewport with 12x12 tiles at 2x scale.
     /// </summary>
-    private (int X, int Y) StandardMapDimensions = (45, 31);
+    private (int X, int Y) m_standardMapDimensions = (45, 31);
 
     /// <summary>The index of the currently active map. Determined by the POV entity.</summary>
-    private OnMap _currentMapIndex;
+    private OnMap m_currentMapIndex;
 
     /// <summary>All game maps indexed by position in the world.</summary>
-    private readonly Dictionary<(int, int), Map> _maps;
+    private readonly Dictionary<(int, int), Map> m_maps;
 
-    private readonly EntityStore _world;
+    private readonly EntityStore m_world;
 
     public MapRepository(EntityStore world)
     {
-        _world = world;
-        _currentMapIndex = new(0, 0);
-        _maps = [];
-        _maps.Add(_currentMapIndex.GetIndexedValue(), new Map(_currentMapIndex, StandardMapDimensions.X, StandardMapDimensions.Y, _world));
+        m_world = world;
+        m_currentMapIndex = new(0, 0);
+        m_maps = [];
+        m_maps.Add(m_currentMapIndex.GetIndexedValue(), new Map(m_currentMapIndex, m_standardMapDimensions.X, m_standardMapDimensions.Y, m_world));
     }
 
     /// <summary>Fetches the active map.</summary>
-    public Map CurrentMap() => _maps[_currentMapIndex.GetIndexedValue()];
+    public Map CurrentMap() => m_maps[m_currentMapIndex.GetIndexedValue()];
 
     /// <summary>Changes the active map.</summary>
-    public void ChangeMap(OnMap map) => _currentMapIndex = map;
+    public void ChangeMap(OnMap map) => m_currentMapIndex = map;
 }

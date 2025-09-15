@@ -6,11 +6,11 @@ namespace Wetware.Map;
 
 public class PositionChangeListener
 {
-    private readonly Map _map;
+    private readonly Map m_map;
 
     public PositionChangeListener(Map map, EntityStore? world = null)
     {
-        _map = map;
+        m_map = map;
         Subscribe(world);
     }
 
@@ -29,21 +29,21 @@ public class PositionChangeListener
     {
         if (e.Type != typeof(Position)) return;
         var flags = e.Entity.GetBlockFlags();
-        if (e.Action == ComponentChangedAction.Update) _map.Clear(e.OldComponent<Position>(), flags);
-        _map.Set(e.Component<Position>(), flags);
+        if (e.Action == ComponentChangedAction.Update) m_map.Clear(e.OldComponent<Position>(), flags);
+        m_map.Set(e.Component<Position>(), flags);
     }
 
     private void HandleComponentRemoved(ComponentChanged e)
     {
         if (e.Type != typeof(Position)) return;
         var flags = e.Entity.GetBlockFlags();
-        _map.Clear(e.OldComponent<Position>(), flags);
+        m_map.Clear(e.OldComponent<Position>(), flags);
     }
 
     private void HandleEntityDelete(EntityDelete e)
     {
         if (!e.Entity.TryGetComponent(out Position pos)) return;
         var flags = e.Entity.GetBlockFlags();
-        _map.Clear(pos, flags);
+        m_map.Clear(pos, flags);
     }
 }

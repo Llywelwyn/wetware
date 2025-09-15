@@ -1,5 +1,7 @@
 using MessagePack;
 
+namespace Wetware.Serializer;
+
 [MessagePackObject]
 public struct TurnQueueEntry
 {

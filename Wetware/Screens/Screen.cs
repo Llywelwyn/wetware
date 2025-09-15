@@ -4,8 +4,8 @@ namespace Wetware.Screens;
 
 public abstract class Screen(Position origin, Position size)
 {
-    protected Position _origin = origin;
-    protected Position _size = size;
+    protected Position m_origin = origin;
+    protected Position m_size = size;
 
     /// <summary>
     /// Whether this screen has processed an input, and should consume it.

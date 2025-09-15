@@ -8,8 +8,8 @@ public enum DebugFlag
 
 public static class Debug
 {
-    private const bool DebugAllOverride = true;
-    private static readonly Dictionary<DebugFlag, bool> Flags = new()
+    private const bool m_debugAllOverride = true;
+    private static readonly Dictionary<DebugFlag, bool> m_flags = new()
     {
         [DebugFlag.SystemBoundary] = false,
         [DebugFlag.AdditionalJsonSerialization] = false,
@@ -17,9 +17,9 @@ public static class Debug
 
     public static bool IsEnabled(DebugFlag name)
     {
-        if (!Flags.TryGetValue(name, out var value))
+        if (!m_flags.TryGetValue(name, out var value))
             throw new ArgumentException($"Unknown flag: {name}.");
-        return value || DebugAllOverride;
+        return value || m_debugAllOverride;
     }
 
     public static void Print(string message) => Console.WriteLine(message);

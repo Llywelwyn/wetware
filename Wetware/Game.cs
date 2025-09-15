@@ -16,7 +16,7 @@ public class Game
     public bool ClockTurn = true;
     public readonly EntityStore World;
     public readonly MapRepository MapRepository;
-    private readonly SystemRoot _updateSystems;
+    private readonly SystemRoot m_updateSystems;
 
     public readonly ScreenManager ScreenManager;
 
@@ -28,7 +28,7 @@ public class Game
         MapRepository = new(World);
         ScreenManager = new();
 
-        _updateSystems = new SystemRoot(World)
+        m_updateSystems = new SystemRoot(World)
         {
             new Systems.Update.Turn.EnergySystem(),
             new Systems.Update.Turn.HealthRegenSystem(),
@@ -52,7 +52,7 @@ public class Game
     public void Tick()
     {
         Console.WriteLine("Ticking UpdateSystems.");
-        _updateSystems.Update(GetTick());
+        m_updateSystems.Update(GetTick());
         WetwareSerializer.SerializeState();
     }
 

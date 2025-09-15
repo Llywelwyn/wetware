@@ -18,7 +18,7 @@ public enum TileFlag
 public class Map
 {
     /// <summary>MapRepository index (and position in the World).</summary>
-    private readonly OnMap _index;
+    private readonly OnMap m_index;
 
     /// <summary>Map width in tiles.</summary>
     public readonly int Width;
@@ -36,15 +36,15 @@ public class Map
     public TileFlag[,] _tiles;
 
     /// <summary>Initialises event listeners for maintaining the _tiles index.</summary>
-    private readonly PositionChangeListener _listener;
+    private readonly PositionChangeListener m_listener;
 
     public Map(OnMap id, int width, int height, EntityStore? world = null)
     {
-        _index = id;
+        m_index = id;
         Width = width;
         Height = height;
         _tiles = new TileFlag[width, height];
-        _listener = new PositionChangeListener(this, world);
+        m_listener = new PositionChangeListener(this, world);
 
         var rng = new Random();
         for (int x = 0; x < width; x++)

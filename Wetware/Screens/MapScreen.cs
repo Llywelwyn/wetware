@@ -20,10 +20,10 @@ class BackgroundScreen(Position origin, Position size) : Screen(origin, size)
         var tileSize = Game.Instance.ScreenManager.Atlas.TileSize;
         Raylib.ClearBackground(Palette.Background);
         Raylib.DrawRectangle(
-                _origin.X * (int)tileSize.X,
-                _origin.Y * (int)tileSize.Y,
-                _size.X * (int)tileSize.X,
-                _size.Y * (int)tileSize.Y,
+                m_origin.X * (int)tileSize.X,
+                m_origin.Y * (int)tileSize.Y,
+                m_size.X * (int)tileSize.X,
+                m_size.Y * (int)tileSize.Y,
                 Palette.DarkGrey);
     }
 }
@@ -48,10 +48,10 @@ class MapScreen : Screen
     public override void Render()
     {
         Raylib.DrawRectangle(
-                _origin.X * (int)m_tileSize.X,
-                _origin.Y * (int)m_tileSize.Y,
-                _size.X * (int)m_tileSize.X,
-                _size.Y * (int)m_tileSize.Y,
+                m_origin.X * (int)m_tileSize.X,
+                m_origin.Y * (int)m_tileSize.Y,
+                m_size.X * (int)m_tileSize.X,
+                m_size.Y * (int)m_tileSize.Y,
                 Palette.Background);
         m_systems.Update(new UpdateTick());
     }

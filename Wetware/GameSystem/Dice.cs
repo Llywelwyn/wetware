@@ -2,16 +2,16 @@
 
 public static class Dice
 {
-    private static bool _seeded;
-    private static Random _random = new();
+    private static bool m_seeded;
+    private static Random m_random = new();
 
     public static void Seed(Random rng)
     {
-        _random = rng;
-        _seeded = true;
+        m_random = rng;
+        m_seeded = true;
     }
 
-    public static bool IsSeeded() => _seeded;
+    public static bool IsSeeded() => m_seeded;
 
     public static int Roll(int count, int sides, int bonus = 0)
     {
@@ -24,5 +24,5 @@ public static class Dice
         return total + bonus;
     }
 
-    private static int Throw(int sides) => _random.Next(1, sides + 1);
+    private static int Throw(int sides) => m_random.Next(1, sides + 1);
 }
