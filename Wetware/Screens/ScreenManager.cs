@@ -1,6 +1,7 @@
 using Raylib_cs;
 using Wetware.Assets;
 using Wetware.Components;
+using Wetware.Maps;
 
 namespace Wetware.Screens;
 
@@ -21,7 +22,7 @@ public class ScreenManager
 
     private readonly Stack m_screens = new();
 
-    public ScreenManager()
+    public ScreenManager(MapRepository mapRepository)
     {
         Atlas = new Atlas("Assets/atlas.png");
         m_screens.Push(new BackgroundScreen(
@@ -29,6 +30,7 @@ public class ScreenManager
             ScreenPercentToNearestTile(1.0f, 1.0f)));
 
         m_screens.Push(new MapScreen(
+            mapRepository,
             new Position(1, 1),
             new Position(WidthPercentToNearestTile(0.75f), HeightInTilesMinus(2)),
             Atlas.TileSize));

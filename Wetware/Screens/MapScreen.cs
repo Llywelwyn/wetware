@@ -3,6 +3,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Raylib_cs;
 using Wetware.Assets;
+using Wetware.Maps;
 using Wetware.Systems.Render;
 using Position = Wetware.Components.Position;
 
@@ -30,14 +31,20 @@ class BackgroundScreen(Position origin, Position size) : Screen(origin, size)
 
 class MapScreen : Screen
 {
-    private static readonly SystemRoot m_systems = [];
+    private readonly SystemRoot m_systems = [];
     private readonly Vector2 m_tileSize;
 
-    public MapScreen(Position origin, Position size, Vector2 tileSize) : base(origin, size)
+    public MapScreen(MapRepository mapRepository, Position origin, Position size, Vector2 tileSize) : base(origin, size)
     {
-        m_systems.AddStore(Game.Instance.World);
         m_systems.Add(new EntityRenderSystem(origin, size));
         m_tileSize = tileSize;
+        mapRepository.OnMapChanged += OnMapChanged;
+    }
+
+    private void OnMapChanged(Map? oldMap, Map newMap)
+    {
+        if (oldMap is not null) m_systems.RemoveStore(oldMap.Entities);
+        m_systems.AddStore(newMap.Entities);
     }
 
     public override void HandleInput()

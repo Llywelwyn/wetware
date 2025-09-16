@@ -2,7 +2,7 @@
 using Friflo.Engine.ECS.Serialize;
 using Wetware.Components;
 using Wetware.Flags;
-using TileFlag = Wetware.Map.TileFlag;
+using TileFlag = Wetware.Maps.TileFlag;
 
 namespace Wetware.Extensions;
 

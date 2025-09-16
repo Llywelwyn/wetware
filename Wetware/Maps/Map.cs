@@ -4,7 +4,7 @@ using Wetware.Components;
 using Wetware.Assets;
 using Wetware.Flags;
 
-namespace Wetware.Map;
+namespace Wetware.Maps;
 
 [Flags]
 public enum TileFlag
@@ -17,9 +17,6 @@ public enum TileFlag
 
 public class Map
 {
-    /// <summary>MapRepository index (and position in the World).</summary>
-    private readonly OnMap m_index;
-
     /// <summary>Map width in tiles.</summary>
     public readonly int Width;
 
@@ -35,16 +32,18 @@ public class Map
     /// </remarks>
     public TileFlag[,] _tiles;
 
+    public readonly EntityStore Entities;
+
     /// <summary>Initialises event listeners for maintaining the _tiles index.</summary>
     private readonly PositionChangeListener m_listener;
 
-    public Map(OnMap id, int width, int height, EntityStore? world = null)
+    public Map(int width, int height)
     {
-        m_index = id;
         Width = width;
         Height = height;
+        Entities = new EntityStore();
         _tiles = new TileFlag[width, height];
-        m_listener = new PositionChangeListener(this, world);
+        m_listener = new PositionChangeListener(this, Entities);
 
         var rng = new Random();
         for (int x = 0; x < width; x++)
@@ -54,11 +53,11 @@ public class Map
                 var color = rng.NextDouble() < 0.25 ? Palette.Red : Palette.Brown;
                 if (rng.NextDouble() < 0.3)
                 {
-                    world.CreateEntity(new Renderable(Sprite.Wall, color), new Position(x, y), Tags.Get<BlocksMovement>());
+                    Entities.CreateEntity(new Renderable(Sprite.Wall, color), new Position(x, y), Tags.Get<BlocksMovement>());
                 }
                 else
                 {
-                    world.CreateEntity(new Renderable(Sprite.Floor, color), new Position(x, y));
+                    Entities.CreateEntity(new Renderable(Sprite.Floor, color), new Position(x, y));
                 }
             }
         }

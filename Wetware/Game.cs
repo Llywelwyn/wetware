@@ -1,6 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
-using Wetware.Map;
+using Wetware.Maps;
 using Wetware.Screens;
 using Wetware.Serializer;
 
@@ -25,9 +25,6 @@ public class Game
         Instance = this;
         Name = string.IsNullOrWhiteSpace(name) ? "world" : name;
         World = CreateStore();
-        MapRepository = new(World);
-        ScreenManager = new();
-
         m_updateSystems = new SystemRoot(World)
         {
             new Systems.Update.Turn.EnergySystem(),
@@ -35,6 +32,11 @@ public class Game
             new Systems.Update.Turn.FinalTurnSystem(),
             new Systems.Update.EntityTurnSystem(),
         };
+
+        MapRepository = new();
+        MapRepository.OnMapChanged += OnMapChanged;
+        ScreenManager = new(MapRepository);
+        MapRepository.Initialise();
 
         if (File.Exists($"Runs/{Name}")) WetwareSerializer.DeserializeState(this);
 
@@ -45,6 +47,12 @@ public class Game
         var store = new EntityStore();
         store.EventRecorder.Enabled = true;
         return store;
+    }
+
+    private void OnMapChanged(Map? oldMap, Map newMap)
+    {
+        if (oldMap is not null) m_updateSystems.RemoveStore(oldMap.Entities);
+        m_updateSystems.AddStore(newMap.Entities);
     }
 
     private static UpdateTick GetTick() => new();

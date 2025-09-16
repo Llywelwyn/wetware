@@ -1,4 +1,4 @@
-namespace Wetware.Map;
+namespace Wetware.Maps;
 
 public enum Edge
 {

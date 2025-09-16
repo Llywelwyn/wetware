@@ -1,7 +1,6 @@
-namespace Wetware.Map;
+namespace Wetware.Maps;
 
 using Components;
-using Friflo.Engine.ECS;
 
 /// <summary>
 /// Map storage. Stores all game maps in a Dictionary indexed by their (X, Y) position in the world, as well as the index of the
@@ -16,24 +15,37 @@ public class MapRepository
     private (int X, int Y) m_standardMapDimensions = (45, 31);
 
     /// <summary>The index of the currently active map. Determined by the POV entity.</summary>
-    private OnMap m_currentMapIndex;
+    private OnMap m_currentMapIndex = new(0, 0);
 
     /// <summary>All game maps indexed by position in the world.</summary>
-    private readonly Dictionary<(int, int), Map> m_maps;
+    private readonly Dictionary<(int, int), Map> m_maps = [];
 
-    private readonly EntityStore m_world;
+    public event Action<Map?, Map>? OnMapChanged;
 
-    public MapRepository(EntityStore world)
+    public void Initialise()
     {
-        m_world = world;
-        m_currentMapIndex = new(0, 0);
-        m_maps = [];
-        m_maps.Add(m_currentMapIndex.GetIndexedValue(), new Map(m_currentMapIndex, m_standardMapDimensions.X, m_standardMapDimensions.Y, m_world));
+        CreateMapIfNeeded(m_currentMapIndex);
+        OnMapChanged?.Invoke(null, CurrentMap());
     }
 
     /// <summary>Fetches the active map.</summary>
     public Map CurrentMap() => m_maps[m_currentMapIndex.GetIndexedValue()];
 
     /// <summary>Changes the active map.</summary>
-    public void ChangeMap(OnMap map) => m_currentMapIndex = map;
+    public void ChangeMap(OnMap map)
+    {
+        var oldMap = CurrentMap();
+        CreateMapIfNeeded(map);
+        m_currentMapIndex = map;
+        var newMap = CurrentMap();
+        OnMapChanged?.Invoke(oldMap, newMap);
+    }
+
+    private void CreateMapIfNeeded(OnMap map)
+    {
+        if (!m_maps.ContainsKey(map.GetIndexedValue()))
+        {
+            m_maps.Add(map.GetIndexedValue(), new Map(m_standardMapDimensions.X, m_standardMapDimensions.Y));
+        }
+    }
 }

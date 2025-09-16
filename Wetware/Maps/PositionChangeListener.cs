@@ -2,13 +2,13 @@
 using Wetware.Extensions;
 using Position = Wetware.Components.Position;
 
-namespace Wetware.Map;
+namespace Wetware.Maps;
 
 public class PositionChangeListener
 {
     private readonly Map m_map;
 
-    public PositionChangeListener(Map map, EntityStore? world = null)
+    public PositionChangeListener(Map map, EntityStore world)
     {
         m_map = map;
         Subscribe(world);
@@ -17,12 +17,11 @@ public class PositionChangeListener
     // TODO: This listener should be moved to the MapRepository, and query the OnMap value of the entity,
     // pushing flag changes to that map. Right now, each map has its own listener, which is overly complex.
 
-    private void Subscribe(EntityStore? world)
+    private void Subscribe(EntityStore world)
     {
-        var _world = world ?? Game.Instance.World;
-        _world.OnComponentAdded += HandleComponentAdded;
-        _world.OnComponentRemoved += HandleComponentRemoved;
-        _world.OnEntityDelete += HandleEntityDelete;
+        world.OnComponentAdded += HandleComponentAdded;
+        world.OnComponentRemoved += HandleComponentRemoved;
+        world.OnEntityDelete += HandleEntityDelete;
     }
 
     private void HandleComponentAdded(ComponentChanged e)

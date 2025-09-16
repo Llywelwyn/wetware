@@ -5,7 +5,7 @@ using Wetware.Config;
 using Wetware.Flags;
 using Wetware.Components;
 using Position = Wetware.Components.Position;
-using Wetware.Map;
+using Wetware.Maps;
 using Wetware.Extensions;
 
 namespace Wetware.Systems.Update;
@@ -16,9 +16,8 @@ public class EntityTurnSystem : QuerySystem
     {
         Debug.SystemBoundaryStart(nameof(EntityTurnSystem));
 
+        if (!Query.Store.TryGetEntityById(TurnQueue.Peek() ?? -1, out var entity)) return;
         if (TurnQueue.Next() is not int id) return;
-
-        var entity = Query.Store.GetEntityById(id);
         if (entity.IsNull) return;
 
         Debug.Print($"{entity.DebugName()}'s turn.");
@@ -41,7 +40,7 @@ public class EntityTurnSystem : QuerySystem
 
         if (!data.TryGet<Position>(out var pos)) return;
 
-        Map.Map map = Game.Instance.MapRepository.CurrentMap();
+        Map map = Game.Instance.MapRepository.CurrentMap();
 
         var possibleMoves = new List<Position>();
         for (int dx = -1; dx <= 1; dx++)

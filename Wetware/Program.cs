@@ -34,7 +34,7 @@ void MakeTestEntities()
         new Energy(0),
         new Speed(100),
         Tags.Get<Clock>());
-    game.World.CreateEntity(
+    game.MapRepository.CurrentMap().Entities.CreateEntity(
         new Name("reflex machine"),
         BrainPresets.Passive(),
         new Renderable(Sprite.Player, Palette.Blue),
@@ -42,7 +42,7 @@ void MakeTestEntities()
         new Wetware.Components.Position(9, 10),
         new Speed(100),
         Tags.Get<BlocksMovement>());
-    game.World.CreateEntity(
+    game.MapRepository.CurrentMap().Entities.CreateEntity(
         new Name("speed machine"),
         BrainPresets.Passive(),
         new Renderable(Sprite.Player, Palette.Cyan),
@@ -50,7 +50,7 @@ void MakeTestEntities()
         new Energy(0),
         new Speed(110),
         Tags.Get<BlocksMovement>());
-    game.World.CreateEntity(
+    game.MapRepository.CurrentMap().Entities.CreateEntity(
         new Name("slow machine"),
         BrainPresets.Passive(),
         new Renderable(Sprite.Player, Palette.DarkRed),
