@@ -28,6 +28,27 @@ public static class TurnQueue
         m_queue.Enqueue(id, -energy);
     }
 
+    /// <summary>Peek at the ID of the next valid entity in the queue, or null if empty.</summary>
+    public static int? Peek()
+    {
+        while (!IsEmpty)
+        {
+            if (!m_queue.TryPeek(out int id, out int energy)) return null;
+            if (!m_entityIndex.TryGetValue(id, out var lastUpdate))
+            {
+                m_queue.Dequeue();
+                continue;
+            }
+            if (energy != lastUpdate)
+            {
+                m_queue.Dequeue();
+                continue;
+            }
+            return id;
+        }
+        return null;
+    }
+
     /// <summary>Fetch the next valid entity in the queue, or null if empty.</summary>
     public static int? Next()
     {
