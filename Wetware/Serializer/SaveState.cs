@@ -1,4 +1,5 @@
 using MessagePack;
+using Wetware.Serializer.Mappers;
 
 namespace Wetware.Serializer;
 
@@ -6,11 +7,17 @@ namespace Wetware.Serializer;
 public class SaveState
 {
     [Key(0)]
-    public byte[] World { get; set; } = [];
+    public required string Name { get; set; }
 
     [Key(1)]
-    public List<TurnQueueEntry> TurnQueue { get; set; } = [];
+    public required byte[] World { get; set; }
 
     [Key(2)]
-    public bool ClockTurn { get; set; } = false;
+    public required List<TurnQueueEntry> TurnQueue { get; set; }
+
+    [Key(3)]
+    public required bool ClockTurn { get; set; }
+
+    [Key(4)]
+    public required MapRepositoryDto MapRepository { get; set; }
 }

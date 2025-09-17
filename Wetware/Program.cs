@@ -10,7 +10,7 @@ Console.WriteLine("a name?");
 var name = Console.ReadLine();
 
 Raylib.InitWindow(1920, 1056, "wetware");
-var game = new Game(name);
+var game = Game.Load(name);
 
 if (!game.LoadedFromFile) MakeTestEntities();
 

@@ -30,19 +30,28 @@ public class Map
     /// <remarks>
     /// Kept up to date via ECS event listeners for OnComponentChanged and EntityDeleted.
     /// </remarks>
-    public TileFlag[,] _tiles;
+    public TileFlag[,] Tiles;
 
     public readonly EntityStore Entities;
 
-    /// <summary>Initialises event listeners for maintaining the _tiles index.</summary>
+    /// <summary>Initialises event listeners for maintaining the Tiles index.</summary>
     private readonly PositionChangeListener m_listener;
+
+    public Map(int width, int height, EntityStore entities, TileFlag[,] tiles)
+    {
+        Width = width;
+        Height = height;
+        Entities = entities;
+        Tiles = tiles;
+        m_listener = new PositionChangeListener(this, Entities);
+    }
 
     public Map(int width, int height)
     {
         Width = width;
         Height = height;
         Entities = new EntityStore();
-        _tiles = new TileFlag[width, height];
+        Tiles = new TileFlag[width, height];
         m_listener = new PositionChangeListener(this, Entities);
 
         var rng = new Random();
@@ -68,15 +77,15 @@ public class Map
 
     /// <summary>Sets a TileFlag for the given location.</summary>
     public void Set(Position pos, TileFlag flag) => Set(pos.X, pos.Y, flag);
-    public void Set(int x, int y, TileFlag flag) => _tiles[x, y] |= flag;
+    public void Set(int x, int y, TileFlag flag) => Tiles[x, y] |= flag;
 
     /// <summary>Checks for a TileFlag at the given location.</summary>
     public bool Has(Position pos, TileFlag flag) => Has(pos.X, pos.Y, flag);
-    public bool Has(int x, int y, TileFlag flag) => (_tiles[x, y] & flag) != 0;
+    public bool Has(int x, int y, TileFlag flag) => (Tiles[x, y] & flag) != 0;
 
     /// <summary>Clears a TileFlag at the given location.</summary>
     public void Clear(Position pos, TileFlag flag) => Clear(pos.X, pos.Y, flag);
-    public void Clear(int x, int y, TileFlag flag) => _tiles[x, y] &= ~flag;
+    public void Clear(int x, int y, TileFlag flag) => Tiles[x, y] &= ~flag;
 
     /// <summary>
     /// Sweeps across the map from the given Edge to find the closest, walkable tile to the given Position.

@@ -6,7 +6,7 @@ using Components;
 /// Map storage. Stores all game maps in a Dictionary indexed by their (X, Y) position in the world, as well as the index of the
 /// current map being rendered (determined by the map of the POV character).
 /// </summary>
-public class MapRepository
+public class MapRepository(Dictionary<(int, int), Map> maps, OnMap currentMapIndex)
 {
     /// <summary>
     /// The standard dimensions of a map. 50x32 tiles. 
@@ -15,12 +15,17 @@ public class MapRepository
     private (int X, int Y) m_standardMapDimensions = (45, 31);
 
     /// <summary>The index of the currently active map. Determined by the POV entity.</summary>
-    private OnMap m_currentMapIndex = new(0, 0);
+    private OnMap m_currentMapIndex = currentMapIndex;
+    public OnMap CurrentMapIndex => m_currentMapIndex;
 
     /// <summary>All game maps indexed by position in the world.</summary>
-    private readonly Dictionary<(int, int), Map> m_maps = [];
+    private readonly Dictionary<(int, int), Map> m_maps = maps;
+    public IReadOnlyDictionary<(int, int), Map> Maps => m_maps;
 
     public event Action<Map?, Map>? OnMapChanged;
+
+    /// <summary>Creates a new MapRepository with no maps and the current map index at (0, 0).</summary>
+    public MapRepository() : this([], new(0, 0)) { }
 
     public void Initialise()
     {

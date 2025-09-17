@@ -3,28 +3,20 @@ using Wetware.Globals;
 using MessagePack;
 using Wetware.Config;
 using System.Text.Json;
+using Friflo.Engine.ECS;
+using Wetware.Serializer.Mappers;
 
 namespace Wetware.Serializer;
 
 public static class WetwareSerializer
 {
-    public static void DeserializeState(Game game)
+    public static EntityStore DeserializeEntityStore(byte[] bytes)
     {
-        byte[] bytes = File.ReadAllBytes($"Runs/{game.Name}");
-        var state = MessagePackSerializer.Deserialize<SaveState>(bytes);
-
-        // Deserialize World
+        var store = new EntityStore();
         var es = new EntitySerializer();
-        using var ms = new MemoryStream(state.World);
-        es.ReadIntoStore(game.World, ms);
-
-        // Deserialize TurnQueue
-        TurnQueue.LoadSnapshot(state.TurnQueue);
-
-        // Deserialize ClockTurn
-        game.ClockTurn = state.ClockTurn;
-
-        game.LoadedFromFile = true;
+        using var ms = new MemoryStream(bytes);
+        es.ReadIntoStore(store, ms);
+        return store;
     }
 
     public static void SerializeState()
@@ -49,18 +41,41 @@ public static class WetwareSerializer
     {
         return new SaveState
         {
-            World = SerializeEntityStore(),
-            TurnQueue = TurnQueue.GetSnapshot().ToList(),
+            Name = Game.Instance.Name,
+            World = SerializeEntityStore(Game.Instance.World),
+            TurnQueue = [.. TurnQueue.GetSnapshot()],
             ClockTurn = Game.Instance.ClockTurn,
+            MapRepository = MapRepositoryMapper.ToDto(Game.Instance.MapRepository),
         };
     }
 
-    public static byte[] SerializeEntityStore()
+    public static byte[] SerializeEntityStore(EntityStore store)
     {
-        var snapshot = Game.Instance.World;
         var serializer = new EntitySerializer();
         using var ms = new MemoryStream();
-        serializer.WriteStore(snapshot, ms);
+        serializer.WriteStore(store, ms);
         return ms.ToArray();
+    }
+
+    public static T[] Flatten<T>(T[,] array)
+    {
+        int width = array.GetLength(0);
+        int height = array.GetLength(1);
+        var flat = new T[width * height];
+
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                flat[y * width + x] = array[x, y];
+
+        return flat;
+    }
+
+    public static T[,] Restore<T>(T[] flat, int width, int height)
+    {
+        var array = new T[width, height];
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                array[x, y] = flat[y * width + x];
+        return array;
     }
 }

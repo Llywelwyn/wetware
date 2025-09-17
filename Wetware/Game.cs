@@ -1,5 +1,7 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
+using MessagePack;
+using Wetware.Globals;
 using Wetware.Maps;
 using Wetware.Screens;
 using Wetware.Serializer;
@@ -20,26 +22,55 @@ public class Game
 
     public readonly ScreenManager ScreenManager;
 
+    public static Game Load(string? name)
+    {
+        name ??= "world";
+        string path = $"Runs/{name}";
+
+        if (!File.Exists(path))
+            return new Game(name);
+
+        var state = MessagePackSerializer.Deserialize<SaveState>(File.ReadAllBytes(path));
+        return new Game(state);
+    }
+
+    public Game(SaveState state)
+    {
+        Instance = this;
+        Name = state.Name;
+        World = WetwareSerializer.DeserializeEntityStore(state.World);
+        m_updateSystems = CreateSystemRoot(World);
+        MapRepository = Serializer.Mappers.MapRepositoryMapper.FromDto(state.MapRepository);
+        MapRepository.OnMapChanged += OnMapChanged;
+        ScreenManager = new(MapRepository);
+        MapRepository.Initialise();
+
+        TurnQueue.LoadSnapshot(state.TurnQueue);
+        ClockTurn = state.ClockTurn;
+        LoadedFromFile = true;
+    }
+
     public Game(string? name)
     {
         Instance = this;
         Name = string.IsNullOrWhiteSpace(name) ? "world" : name;
         World = CreateStore();
-        m_updateSystems = new SystemRoot(World)
+        m_updateSystems = CreateSystemRoot(World);
+        MapRepository = new();
+        MapRepository.OnMapChanged += OnMapChanged;
+        ScreenManager = new(MapRepository);
+        MapRepository.Initialise();
+    }
+
+    private static SystemRoot CreateSystemRoot(EntityStore store)
+    {
+        return new SystemRoot(store)
         {
             new Systems.Update.Turn.EnergySystem(),
             new Systems.Update.Turn.HealthRegenSystem(),
             new Systems.Update.Turn.FinalTurnSystem(),
             new Systems.Update.EntityTurnSystem(),
         };
-
-        MapRepository = new();
-        MapRepository.OnMapChanged += OnMapChanged;
-        ScreenManager = new(MapRepository);
-        MapRepository.Initialise();
-
-        if (File.Exists($"Runs/{Name}")) WetwareSerializer.DeserializeState(this);
-
     }
 
     private static EntityStore CreateStore()
