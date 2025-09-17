@@ -21,6 +21,7 @@ public class EntityTurnSystem : QuerySystem
         if (entity.IsNull) return;
 
         Debug.Print($"{entity.DebugName()}'s turn.");
+        Debug.Print(entity.DebugJSON);
 
         var data = entity.Data;
 
