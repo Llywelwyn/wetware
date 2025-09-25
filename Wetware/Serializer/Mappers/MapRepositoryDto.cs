@@ -10,7 +10,7 @@ public class MapRepositoryDto
     public (int X, int Y) CurrentMapIndex { get; set; }
 
     [Key(1)]
-    public List<MapDto> Maps = [];
+    public List<MapDto> Maps { get; set; } = [];
 }
 
 [MessagePackObject]
